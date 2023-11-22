@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package vista;
-import bd.Conexion;
+import conexion.Conexion;
 import controlador.Coleccion;
 import modelo.Pelicula;
 /**

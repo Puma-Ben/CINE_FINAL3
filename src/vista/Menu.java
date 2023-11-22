@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package vista;
-import bd.Conexion;
+import conexion.Conexion;
 import controlador.Coleccion;
 import modelo.Pelicula;
 
@@ -40,7 +40,6 @@ public class Menu extends javax.swing.JFrame {
         TLISTAR = new javax.swing.JToggleButton();
         jLabel1 = new javax.swing.JLabel();
         SALIR = new javax.swing.JButton();
-        CONECTAR = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -99,13 +98,6 @@ public class Menu extends javax.swing.JFrame {
             }
         });
 
-        CONECTAR.setText("Conectar");
-        CONECTAR.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CONECTARActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -117,9 +109,7 @@ public class Menu extends javax.swing.JFrame {
                         .addComponent(jLabel1))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(163, 163, 163)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(CONECTAR)
-                            .addComponent(SALIR)))
+                        .addComponent(SALIR))
                     .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(178, Short.MAX_VALUE))
         );
@@ -129,9 +119,7 @@ public class Menu extends javax.swing.JFrame {
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(61, 61, 61)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 140, Short.MAX_VALUE)
-                .addComponent(CONECTAR)
-                .addGap(54, 54, 54)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 221, Short.MAX_VALUE)
                 .addComponent(SALIR)
                 .addGap(25, 25, 25))
         );
@@ -158,12 +146,6 @@ public class Menu extends javax.swing.JFrame {
         // TODO add your handling code here:
         this.dispose();
     }//GEN-LAST:event_SALIRActionPerformed
-
-    private void CONECTARActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CONECTARActionPerformed
-        // TODO add your handling code here:
-        Conexion c = new Conexion();
-        c.obtenerConexion();
-    }//GEN-LAST:event_CONECTARActionPerformed
 
     private void TAGREGARActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TAGREGARActionPerformed
         // TODO add your handling code here:
@@ -227,7 +209,6 @@ public class Menu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton CONECTAR;
     private javax.swing.JButton SALIR;
     private javax.swing.JToggleButton TAGREGAR;
     private javax.swing.JToggleButton TELIMINAR;

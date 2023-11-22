@@ -3,10 +3,24 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package vista;
-import bd.Conexion;
+
+import conexion.Conexion;
 import controlador.Coleccion;
+import genero.Genero;
+import genero.ListaGenero;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import modelo.Pelicula;
+
 /**
  *
  * @author benja
@@ -18,6 +32,8 @@ public class ListarMenu extends javax.swing.JFrame {
      */
     public ListarMenu() {
         initComponents();
+        cargarTabla();
+        cargarCombo(jComboBox1);
     }
 
     /**
@@ -30,9 +46,8 @@ public class ListarMenu extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        JGenero = new javax.swing.JTextField();
-        JInicioAño = new javax.swing.JTextField();
-        JFinalAño = new javax.swing.JTextField();
+        desde = new javax.swing.JTextField();
+        hasta = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         LISTAR = new javax.swing.JButton();
         SALIR = new javax.swing.JButton();
@@ -40,18 +55,14 @@ public class ListarMenu extends javax.swing.JFrame {
         TABLA = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        JGenero.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                JGeneroActionPerformed(evt);
-            }
-        });
-
         jLabel3.setText("-");
 
-        LISTAR.setText("LISTAR");
+        LISTAR.setText("Limpiar Campo");
         LISTAR.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 LISTARActionPerformed(evt);
@@ -70,7 +81,7 @@ public class ListarMenu extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Titulo", "Director", "Año", "Duracion", "Genero"
+                "ID", "Titulo", "Director", "Año", "Genero"
             }
         ));
         jScrollPane2.setViewportView(TABLA);
@@ -79,6 +90,20 @@ public class ListarMenu extends javax.swing.JFrame {
 
         jLabel2.setText("Rango de Años");
 
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBox1ItemStateChanged(evt);
+            }
+        });
+
+        jButton1.setText("Filtro");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -86,27 +111,29 @@ public class ListarMenu extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(62, 62, 62)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(SALIR)
-                            .addComponent(LISTAR)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(19, 19, 19)
-                        .addComponent(JInicioAño, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(desde, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(JFinalAño, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(hasta, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(79, 79, 79)
                         .addComponent(jLabel1))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(JGenero, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                            .addGap(60, 60, 60)
-                            .addComponent(jLabel2))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(60, 60, 60)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(49, 49, 49)
+                        .addComponent(LISTAR))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(69, 69, 69)
+                        .addComponent(SALIR))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(63, 63, 63)
+                        .addComponent(jButton1)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(22, 22, 22))
@@ -116,20 +143,22 @@ public class ListarMenu extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(31, 31, 31)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(JGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2)
                 .addGap(8, 8, 8)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(JFinalAño, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(hasta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
-                    .addComponent(JInicioAño, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 135, Short.MAX_VALUE)
+                    .addComponent(desde, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 90, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(18, 18, 18)
                 .addComponent(LISTAR)
-                .addGap(82, 82, 82)
+                .addGap(80, 80, 80)
                 .addComponent(SALIR)
-                .addGap(16, 16, 16))
+                .addGap(18, 18, 18))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
@@ -161,19 +190,30 @@ public class ListarMenu extends javax.swing.JFrame {
 
     private void LISTARActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LISTARActionPerformed
         // TODO add your handling code here:
-        Pelicula pelicula = new Pelicula();
-        
-        pelicula.setGenero(JGenero.getText());
-        
-        
-        
-        
+        desde.setText("");
+        hasta.setText("");
+        cargarTabla();
     }//GEN-LAST:event_LISTARActionPerformed
 
-    private void JGeneroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JGeneroActionPerformed
+    private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
         // TODO add your handling code here:
-        
-    }//GEN-LAST:event_JGeneroActionPerformed
+        String query = jComboBox1.getSelectedItem().toString();
+        DefaultTableModel modelo = (DefaultTableModel) TABLA.getModel();
+
+        TableRowSorter<DefaultTableModel> tr = new TableRowSorter<DefaultTableModel>(modelo);
+        TABLA.setRowSorter(tr);
+
+        if (query != " ") {
+            tr.setRowFilter(RowFilter.regexFilter(query));
+        } else {
+            TABLA.setRowSorter(tr);
+        }
+    }//GEN-LAST:event_jComboBox1ItemStateChanged
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        cargarTablaPersonalizada();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -211,16 +251,112 @@ public class ListarMenu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField JFinalAño;
-    private javax.swing.JTextField JGenero;
-    private javax.swing.JTextField JInicioAño;
     private javax.swing.JButton LISTAR;
     private javax.swing.JButton SALIR;
     private javax.swing.JTable TABLA;
+    private javax.swing.JTextField desde;
+    private javax.swing.JTextField hasta;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
+
+    private DefaultTableModel cargarTabla() {
+        DefaultTableModel modeloTabla = (DefaultTableModel) TABLA.getModel(); // Reemplaza 'tblAlumnos' con el nombre correcto de tu JTable
+        modeloTabla.setRowCount(0);
+        PreparedStatement ps;
+        ResultSet rs;
+        ResultSetMetaData rsmd;
+        int columnas;
+        int[] anchos = {30, 50, 100, 30, 100}; // Ajusta los anchos de las columnas según tus necesidades
+
+        // Ajusta el ancho de cada columna en la JTable
+        for (int i = 0; i < TABLA.getColumnCount(); i++) {
+            TABLA.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+        }
+
+        try {
+            Connection con = Conexion.getConexion();
+            ps = con.prepareStatement("SELECT  id, titulo, anno, director, genero FROM pelicula ORDER BY id ASC");
+            rs = ps.executeQuery();
+            rsmd = rs.getMetaData();
+            columnas = rsmd.getColumnCount();
+
+            while (rs.next()) {
+                Object[] fila = new Object[columnas];
+                for (int indice = 0; indice < columnas; indice++) {
+                    fila[indice] = rs.getObject(indice + 1);
+                }
+                modeloTabla.addRow(fila);
+            }
+            return modeloTabla;
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al cargar la tabla: " + e.toString());
+        }
+        return null;
+    }
+
+    private void cargarCombo(JComboBox c) {
+        DefaultComboBoxModel combo = new DefaultComboBoxModel();
+        c.setModel(combo);
+        ListaGenero lg = new ListaGenero();
+        PreparedStatement ps;
+        ResultSet rs;
+        try {
+            Connection con = Conexion.getConexion();
+            ps = con.prepareStatement("SELECT DISTINCT genero FROM pelicula ORDER BY genero ASC");
+            rs = ps.executeQuery();
+            combo.addElement(" ");
+            while (rs.next()) {
+                Genero g = new Genero();
+                g.setNombre(rs.getString(1));
+                lg.agregarGenero(g);
+                combo.addElement(g.getNombre());
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al cargar listado" + e.toString());
+        }
+    }
+
+    private DefaultTableModel cargarTablaPersonalizada() {
+        DefaultTableModel modeloTabla = (DefaultTableModel) TABLA.getModel(); // Reemplaza 'tblAlumnos' con el nombre correcto de tu JTable
+        modeloTabla.setRowCount(0);
+        PreparedStatement ps;
+        ResultSet rs;
+        ResultSetMetaData rsmd;
+        int columnas;
+        int[] anchos = {30, 50, 100, 30, 100}; // Ajusta los anchos de las columnas según tus necesidades
+
+        // Ajusta el ancho de cada columna en la JTable
+        for (int i = 0; i < TABLA.getColumnCount(); i++) {
+            TABLA.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+        }
+
+        try {
+            Connection con = Conexion.getConexion();
+            ps = con.prepareStatement(
+                    "SELECT  id, titulo, anno, director, genero "
+                            + "FROM pelicula WHERE anno <'"+hasta.getText()+"' AND '"+desde.getText()+"'< anno ORDER BY id ASC"
+            );
+            rs = ps.executeQuery();
+            rsmd = rs.getMetaData();
+            columnas = rsmd.getColumnCount();
+
+            while (rs.next()) {
+                Object[] fila = new Object[columnas];
+                for (int indice = 0; indice < columnas; indice++) {
+                    fila[indice] = rs.getObject(indice + 1);
+                }
+                modeloTabla.addRow(fila);
+            }
+            return modeloTabla;
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al cargar la tabla: " + e.toString());
+        }
+        return null;
+    }
 }

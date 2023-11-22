@@ -3,8 +3,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package vista;
-import bd.Conexion;
+import conexion.Conexion;
 import controlador.Coleccion;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import javax.swing.JOptionPane;
 import modelo.Pelicula;
 /**
  *
@@ -29,7 +32,6 @@ public class AgregarMenu extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
         TextID = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         TextTitulo = new javax.swing.JTextField();
@@ -38,9 +40,6 @@ public class AgregarMenu extends javax.swing.JFrame {
         SALIR = new javax.swing.JButton();
         TextAño = new javax.swing.JTextField();
         LIMPIAR = new javax.swing.JButton();
-        TextDuracion = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
         TextGenero = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -48,8 +47,6 @@ public class AgregarMenu extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jLabel5.setText("Duración");
 
         TextID.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -86,10 +83,6 @@ public class AgregarMenu extends javax.swing.JFrame {
             }
         });
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
-
         jLabel1.setText("ID");
 
         jLabel2.setText("Titulo");
@@ -103,19 +96,17 @@ public class AgregarMenu extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(65, 65, 65)
+                .addGap(71, 71, 71)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3)
                     .addComponent(jLabel4)
-                    .addComponent(jLabel5)
                     .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(TextGenero, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(SALIR, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(88, 88, 88))
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -128,14 +119,11 @@ public class AgregarMenu extends javax.swing.JFrame {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(LIMPIAR, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(AGREGAR)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(TextDuracion, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE)
-                                    .addComponent(TextAño, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(TextDirector))
-                                .addGap(28, 28, 28)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(TextAño, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE)
+                                .addComponent(TextDirector))
+                            .addComponent(TextGenero, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(47, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -151,29 +139,23 @@ public class AgregarMenu extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(LIMPIAR))
                 .addGap(25, 25, 25)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(TextDirector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))
-                        .addGap(27, 27, 27)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(TextAño, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(TextDuracion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
+                    .addComponent(TextDirector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addGap(27, 27, 27)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(TextAño, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addGap(11, 11, 11)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                        .addGap(2, 2, 2)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(TextGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6))
-                        .addGap(27, 27, 27))
+                            .addComponent(jLabel6)
+                            .addComponent(TextGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(62, 89, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(38, 38, 38)
                         .addComponent(SALIR)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
@@ -198,16 +180,31 @@ public class AgregarMenu extends javax.swing.JFrame {
 
     private void AGREGARActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AGREGARActionPerformed
         // TODO add your handling code here:
+        String id = TextID.getText();
+        String title = TextTitulo.getText();
+        String anno = TextAño.getText();
+        String director = TextDirector.getText();
+        String gen = TextGenero.getText();
+        try {
+            Connection con = Conexion.getConexion();
+            PreparedStatement ps = con.prepareStatement("INSERT INTO pelicula (id, titulo, anno, director, genero) VALUES (?, ?, ?, ?, ?)");
+            ps.setString(1, id);
+            ps.setString(2, title);
+            ps.setString(3, anno);
+            ps.setString(4, director);
+            ps.setString(5, gen);
+            ps.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Película agregada correctamente");
+            TextID.setText("");
+            TextTitulo.setText("");
+            TextAño.setText("");
+            TextDirector.setText("");
+            TextGenero.setText("");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            JOptionPane.showMessageDialog(null, e.getMessage());
 
-        Pelicula pelicula = new Pelicula();
-        pelicula.setId(TextID.getText());
-        pelicula.setTitulo(TextTitulo.getText());
-        pelicula.setDirector(TextDirector.getText());
-        pelicula.setAño(Integer.parseInt(TextAño.getText()));
-        pelicula.setDuracion(Integer.parseInt(TextDuracion.getText()));
-        pelicula.setGenero(TextGenero.getText());
-
-        col.agregar(pelicula);
+        }
     }//GEN-LAST:event_AGREGARActionPerformed
 
     private void SALIRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SALIRActionPerformed
@@ -267,7 +264,6 @@ public class AgregarMenu extends javax.swing.JFrame {
     private javax.swing.JButton SALIR;
     private javax.swing.JTextField TextAño;
     private javax.swing.JTextField TextDirector;
-    private javax.swing.JTextField TextDuracion;
     private javax.swing.JTextField TextGenero;
     private javax.swing.JTextField TextID;
     private javax.swing.JTextField TextTitulo;
@@ -275,11 +271,8 @@ public class AgregarMenu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
 
     public void limpiar(){
@@ -287,7 +280,6 @@ public class AgregarMenu extends javax.swing.JFrame {
     TextTitulo.setText("");
     TextDirector.setText("");
     TextAño.setText("");
-    TextDuracion.setText("");
     TextGenero.setText("");
 }
 

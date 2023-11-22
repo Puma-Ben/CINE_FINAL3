@@ -52,10 +52,7 @@
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="163" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="CONECTAR" min="-2" max="-2" attributes="0"/>
-                              <Component id="SALIR" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="SALIR" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Component id="jToolBar1" alignment="0" min="-2" pref="325" max="-2" attributes="0"/>
                   </Group>
@@ -69,9 +66,7 @@
                   <Component id="jToolBar1" min="-2" pref="25" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
                   <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="140" max="32767" attributes="0"/>
-                  <Component id="CONECTAR" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="54" max="-2" attributes="0"/>
+                  <EmptySpace pref="221" max="32767" attributes="0"/>
                   <Component id="SALIR" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
               </Group>
@@ -143,14 +138,6 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="SALIRActionPerformed"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JButton" name="CONECTAR">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Conectar"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CONECTARActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>
