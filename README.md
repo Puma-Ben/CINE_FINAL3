@@ -20,30 +20,30 @@ siguiente:
 
 esto es para crear un usuario, luego de crear el usuario e ingresar a este creamos la tabla, en este caso ocuparemos la mala practica de escribir el nombre de la tabla en plural.
 ```SQL
-  CREATE TABLE peliculas(
+  CREATE TABLE pelicula(
   ID INT NOT NULL,
   titulo VARCHAR2(60) NOT NULL,
-  annio INT NOT NULL,
+  anno INT NOT NULL,
   director VARCHAR2(60),
   genero VARCHAR2(60) NOT NULL,
   duracion INT
   );
 
-  ALTER TABLE peliculas
+  ALTER TABLE pelicula
     ADD CONSTRAINT id_pk PRIMARY KEY (id);
 ```
 
 con esto crearemos la tabla peliculas con id como primary key por lo cual ningun id puede ser vacia y tambien tiene que ser unica, entonces ahora haremos lo siguiente en oracle
 ```SQL
-  CREATE SEQUENCE id_inc
+  CREATE SEQUENCE id_auto
   START WITH 1
   INCREMENT BY 1;
 
-  CREATE TRIGGER trig_id_inc
-  BEFORE INSERT ON peliculas
+  CREATE TRIGGER trig_id_auto
+  BEFORE INSERT ON pelicula
   FOR EACH ROW
   BEGIN
-    SELECT id_inc.NEXTVAL INTO :NEW.ID FROM DUAL;
+    SELECT id_auto.NEXTVAL INTO :NEW.ID FROM DUAL;
   END;
 ```
 con esto tendremos id automatico al momento de ingresar peliculas.
