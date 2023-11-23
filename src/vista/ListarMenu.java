@@ -81,7 +81,7 @@ public class ListarMenu extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Titulo", "Director", "Año", "Genero"
+                "ID", "Titulo", "Director", "Año", "Genero", "Duracion"
             }
         ));
         jScrollPane2.setViewportView(TABLA);
@@ -272,7 +272,7 @@ public class ListarMenu extends javax.swing.JFrame {
         ResultSet rs;
         ResultSetMetaData rsmd;
         int columnas;
-        int[] anchos = {30, 50, 100, 30, 100}; // Ajusta los anchos de las columnas según tus necesidades
+        int[] anchos = {30, 50, 100, 30, 100, 50}; // Ajusta los anchos de las columnas según tus necesidades
 
         // Ajusta el ancho de cada columna en la JTable
         for (int i = 0; i < TABLA.getColumnCount(); i++) {
@@ -281,7 +281,7 @@ public class ListarMenu extends javax.swing.JFrame {
 
         try {
             Connection con = Conexion.getConexion();
-            ps = con.prepareStatement("SELECT  id, titulo, anno, director, genero FROM pelicula ORDER BY id ASC");
+            ps = con.prepareStatement("SELECT  id, titulo, anno, director, genero, duracion FROM pelicula ORDER BY id ASC");
             rs = ps.executeQuery();
             rsmd = rs.getMetaData();
             columnas = rsmd.getColumnCount();
@@ -329,7 +329,7 @@ public class ListarMenu extends javax.swing.JFrame {
         ResultSet rs;
         ResultSetMetaData rsmd;
         int columnas;
-        int[] anchos = {30, 50, 100, 30, 100}; // Ajusta los anchos de las columnas según tus necesidades
+        int[] anchos = {30, 50, 100, 30, 100, 50}; // Ajusta los anchos de las columnas según tus necesidades
 
         // Ajusta el ancho de cada columna en la JTable
         for (int i = 0; i < TABLA.getColumnCount(); i++) {
@@ -339,8 +339,8 @@ public class ListarMenu extends javax.swing.JFrame {
         try {
             Connection con = Conexion.getConexion();
             ps = con.prepareStatement(
-                    "SELECT  id, titulo, anno, director, genero "
-                            + "FROM pelicula WHERE anno <'"+hasta.getText()+"' AND '"+desde.getText()+"'< anno ORDER BY id ASC"
+                    "SELECT  id, titulo, anno, director, genero, duracion "
+                            + "FROM pelicula WHERE anno <='"+hasta.getText()+"' AND '"+desde.getText()+"'<= anno ORDER BY id ASC"
             );
             rs = ps.executeQuery();
             rsmd = rs.getMetaData();
